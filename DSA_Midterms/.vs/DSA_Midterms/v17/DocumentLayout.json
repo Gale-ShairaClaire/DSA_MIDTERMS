@@ -1,0 +1,53 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\25-023S\\Documents\\Shaiii\\DSA_Midterms\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{CC78B541-279C-4B1B-9E14-0E0535ADEDD8}|DSA_Midterms\\DSA_Midterms.csproj|c:\\users\\25-023s\\documents\\shaiii\\dsa_midterms\\dsa_midterms\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{CC78B541-279C-4B1B-9E14-0E0535ADEDD8}|DSA_Midterms\\DSA_Midterms.csproj|solutionrelative:dsa_midterms\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CC78B541-279C-4B1B-9E14-0E0535ADEDD8}|DSA_Midterms\\DSA_Midterms.csproj|c:\\users\\25-023s\\documents\\shaiii\\dsa_midterms\\dsa_midterms\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CC78B541-279C-4B1B-9E14-0E0535ADEDD8}|DSA_Midterms\\DSA_Midterms.csproj|solutionrelative:dsa_midterms\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\25-023S\\Documents\\Shaiii\\DSA_Midterms\\DSA_Midterms\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "DSA_Midterms\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\25-023S\\Documents\\Shaiii\\DSA_Midterms\\DSA_Midterms\\MainWindow.xaml",
+              "RelativeToolTip": "DSA_Midterms\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-18T09:23:05.27Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\25-023S\\Documents\\Shaiii\\DSA_Midterms\\DSA_Midterms\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "DSA_Midterms\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\25-023S\\Documents\\Shaiii\\DSA_Midterms\\DSA_Midterms\\MainWindow.xaml.cs",
+              "RelativeToolTip": "DSA_Midterms\\MainWindow.xaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABwAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-18T09:23:04.03Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
