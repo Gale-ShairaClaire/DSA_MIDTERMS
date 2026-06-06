@@ -1,138 +1,168 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml.Linq;
 
-namespace WpfApp1
+namespace DSA_Midterms
 {
     public partial class MainWindow : Window
     {
-        private readonly List<Student> _studentList = new();
-        public ObservableCollection<Student> Students { get; } = new();
+        // Source list for available products
+        private readonly List<Product> _productList = new List<Product>();
+
+        // Source list for cart products
+        private readonly List<Product> _cartList = new List<Product>();
+
+        // Observable collections bound to the two DataGrids
+        public ObservableCollection<Product> Products { get; } = new ObservableCollection<Product>();
+        public ObservableCollection<Product> CartItems { get; } = new ObservableCollection<Product>();
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
-            RefreshGrid();
+            RefreshProductGrid();
+            RefreshCartGrid();
         }
 
-        private void RefreshGrid()
+
+        private void RefreshProductGrid()
         {
-            Students.Clear();
-            foreach (var s in _studentList)
-                Students.Add(s);
+            Products.Clear();
+            foreach (var p in _productList)
+                Products.Add(p);
         }
 
-        private Student? ReadInputs()
+        private void RefreshCartGrid()
+        {
+            CartItems.Clear();
+            foreach (var p in _cartList)
+                CartItems.Add(p);
+        }
+
+
+        private Product ReadInputs()
         {
             if (!int.TryParse(txtID.Text.Trim(), out int id))
             {
-                MessageBox.Show("ID must be a whole number.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Product ID must be a whole number.", "Validation",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
                 return null;
             }
-            if (!decimal.TryParse(txtSalary.Text.Trim(), out decimal salary))
+            if (!decimal.TryParse(txtSalary.Text.Trim(), out decimal price))
             {
-                MessageBox.Show("Salary must be a number.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Price must be a number.", "Validation",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
                 return null;
             }
-            return new Student
+            return new Product
             {
-                ID = id,
-                Name = txtName.Text.Trim(),
-                Title = txtTitle.Text.Trim(),
-                Salary = salary
+                ProductID = id,
+                ProductName = txtName.Text.Trim(),
+                Description = txtTitle.Text.Trim(),
+                Price = price
             };
         }
 
-        private void FillInputs(Student s)
+        private void FillInputs(Product p)
         {
-            txtID.Text = s.ID.ToString();
-            txtName.Text = s.Name ?? "";
-            txtTitle.Text = s.Title ?? "";
-            txtSalary.Text = s.Salary.ToString("0.##");
+            txtID.Text = p.ProductID.ToString();
+            txtName.Text = p.ProductName ?? "";
+            txtTitle.Text = p.Description ?? "";
+            txtSalary.Text = p.Price.ToString("0.##");
         }
 
         private void ClearInputs()
         {
-            txtID.Text = txtName.Text = txtTitle.Text = txtSalary.Text = "";
+            txtID.Text = "";
+            txtName.Text = "";
+            txtTitle.Text = "";
+            txtSalary.Text = "";
         }
+
 
         private void myDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (myDataGrid.SelectedItem is Student s)
-                FillInputs(s);
+            if (myDataGrid.SelectedItem is Product p)
+                FillInputs(p);
         }
 
+        // Add a new product to the Available Items list
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            var student = ReadInputs();
-            if (student == null) return;
+            var product = ReadInputs();
+            if (product == null) return;
 
-            if (_studentList.Exists(x => x.ID == student.ID))
+            if (_productList.Exists(x => x.ProductID == product.ProductID))
             {
-                MessageBox.Show($"A student with ID {student.ID} already exists.", "Duplicate ID",
+                MessageBox.Show("A product with ID " + product.ProductID + " already exists.", "Duplicate ID",
                                 MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            _studentList.Add(student);
-            RefreshGrid();
+            _productList.Add(product);
+            RefreshProductGrid();
             ClearInputs();
-            MessageBox.Show($"Student '{student.Name}' added successfully.", "Add", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Product '" + product.ProductName + "' added successfully.", "Add",
+                            MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        // Remove selected product from the Available Items list
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (myDataGrid.SelectedItem is not Student selected)
+            if (!(myDataGrid.SelectedItem is Product selected))
             {
-                MessageBox.Show("Select a row to remove.", "Remove", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Select a row to remove.", "Remove",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            _studentList.RemoveAll(x => x.ID == selected.ID);
-            RefreshGrid();
+            _productList.RemoveAll(x => x.ProductID == selected.ProductID);
+            RefreshProductGrid();
             ClearInputs();
-            MessageBox.Show($"Student '{selected.Name}' removed successfully.", "Remove", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Product '" + selected.ProductName + "' removed successfully.", "Remove",
+                            MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        // Add the selected Available Item to the Shopping Cart
+        private void AddToCartButton_Click(object sender, RoutedEventArgs e)
         {
-            if (myDataGrid.SelectedItem is not Student selected)
+            if (!(myDataGrid.SelectedItem is Product selected))
             {
-                MessageBox.Show("Select a row to update.", "Update", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Select a product from Available Items to add to cart.", "Add to Cart",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            var updated = ReadInputs();
-            if (updated == null) return;
+            _cartList.Add(new Product
+            {
+                ProductID = selected.ProductID,
+                ProductName = selected.ProductName,
+                Description = selected.Description,
+                Price = selected.Price
+            });
 
-            var index = _studentList.FindIndex(x => x.ID == selected.ID);
-            if (index < 0) return;
-
-            _studentList[index] = updated;
-            RefreshGrid();
-            myDataGrid.SelectedItem = Students.Count > index ? Students[index] : null;
-            MessageBox.Show($"Student '{updated.Name}' updated successfully.", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
+            RefreshCartGrid();
+            MessageBox.Show("'" + selected.ProductName + "' added to cart.", "Add to Cart",
+                            MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        // Clear all records from both grids
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            _studentList.Clear();
-            RefreshGrid();
             myDataGrid.UnselectAll();
             ClearInputs();
-            MessageBox.Show("All records have been cleared.", "Clear", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        public class Student
+
+        public class Product
         {
-            public int ID { get; set; }
-            public string? Name { get; set; }
-            public string? Title { get; set; }
-            public decimal Salary { get; set; }
+            public int ProductID { get; set; }
+            public string ProductName { get; set; }
+            public string Description { get; set; }
+            public decimal Price { get; set; }
         }
     }
 }
+
